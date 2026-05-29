@@ -8,19 +8,20 @@ INSERT INTO dbo.dim_localidade (
     sigla_localizador,
     descricao_complementar_localizador
 )
-SELECT DISTINCT
-    s.uf,
-    s.municipio,
-    s.codigo_subtitulo,
-    s.nome_subtitulo,
-    s.codigo_localizador,
-    s.nome_localizador,
-    s.sigla_localizador,
-    s.descricao_complementar_localizador
-FROM transparencia_lh.dbo.silver_despesas s
-LEFT JOIN dbo.dim_localidade d
-    ON s.codigo_subtitulo = d.codigo_subtitulo
-    AND s.codigo_localizador = d.codigo_localizador
-WHERE d.localidade_sk IS NULL;
+SELECT 
+    MAX(uf) AS uf,
+    MAX(municipio) AS municipio,
+    
+    codigo_subtitulo,
+    MAX(nome_subtitulo) AS nome_subtitulo,
+    
+    codigo_localizador,
+    MAX(nome_localizador) AS nome_localizador,
+    
+    MAX(sigla_localizador) AS sigla_localizador,
+    MAX(descricao_complementar_localizador) AS descricao_complementar_localizador
 
-
+FROM transparencia_lh.dbo.silver_despesas
+GROUP BY 
+    codigo_subtitulo,
+    codigo_localizador;

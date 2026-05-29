@@ -10,25 +10,26 @@ INSERT INTO dbo.dim_orgao (
     codigo_unidade_orcamentaria,
     nome_unidade_orcamentaria
 )
-SELECT DISTINCT
-    s.codigo_orgao_superior,
-    s.nome_orgao_superior,
-    s.codigo_orgao_subordinado,
-    s.nome_orgao_subordinado,
-    s.codigo_unidade_gestora,
-    s.nome_unidade_gestora,
-    s.codigo_gestao,
-    s.nome_gestao,
-    s.codigo_unidade_orcamentaria,
-    s.nome_unidade_orcamentaria
-FROM transparencia_lh.dbo.silver_despesas s
-LEFT JOIN dbo.dim_orgao d
-    ON s.codigo_orgao_superior = d.codigo_orgao_superior
-    AND s.codigo_orgao_subordinado = d.codigo_orgao_subordinado
-    AND s.codigo_unidade_gestora = d.codigo_unidade_gestora
-    AND s.codigo_gestao = d.codigo_gestao
-    AND s.codigo_unidade_orcamentaria = d.codigo_unidade_orcamentaria
-    AND s.codigo_unidade_orcamentaria = d.codigo_unidade_orcamentaria
-WHERE d.orgao_sk IS NULL;
+SELECT 
+    codigo_orgao_superior,
+    MAX(nome_orgao_superior) AS nome_orgao_superior,
+    
+    codigo_orgao_subordinado,
+    MAX(nome_orgao_subordinado) AS nome_orgao_subordinado,
+    
+    codigo_unidade_gestora,
+    MAX(nome_unidade_gestora) AS nome_unidade_gestora,
+    
+    codigo_gestao,
+    MAX(nome_gestao) AS nome_gestao,
+    
+    codigo_unidade_orcamentaria,
+    MAX(nome_unidade_orcamentaria) AS nome_unidade_orcamentaria
 
-
+FROM transparencia_lh.dbo.silver_despesas
+GROUP BY 
+    codigo_orgao_superior,
+    codigo_orgao_subordinado,
+    codigo_unidade_gestora,
+    codigo_gestao,
+    codigo_unidade_orcamentaria;

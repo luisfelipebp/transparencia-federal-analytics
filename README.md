@@ -134,7 +134,7 @@ No Fabric, criar o Semantic Model a partir das tabelas Gold e publicar o relató
 ![Dashboard Overview](docs/dashboard_overview.png)
 
 ### Análise Geográfica
-![Dashboard Geográfico](docs/dashboard_geografico.png)
+![Dashboard Geográfico](docs/dashboard_geo.png)
 
 ---
 
